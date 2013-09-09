@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+}
+
+dependencies {
+	/* 
+	 * by default this build expects BladeRunner to be extracted into the directory above
+	 * change '../BladeRunner/' to the full path of BladeRunner if it is installed somewhere else
+	 */
+	compile fileTree(dir:"../BladeRunner/sdk/libs/java/system/", include:"brjs-*.jar")
+}
