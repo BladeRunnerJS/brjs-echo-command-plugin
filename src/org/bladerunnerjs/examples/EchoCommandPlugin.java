@@ -1,27 +1,18 @@
 package org.bladerunnerjs.examples;
 
-import java.util.Arrays;
+import org.bladerunnerjs.core.plugin.command.ArgsParsingCommandPlugin;
+import org.bladerunnerjs.model.BRJS;
+import org.bladerunnerjs.model.exception.command.CommandArgumentsException;
+import org.bladerunnerjs.model.exception.command.CommandOperationException;
 
-import com.caplin.brjs.core.plugin.command.CommandPlugin;
-import com.caplin.brjs.model.BRJS;
-import com.caplin.brjs.model.exception.command.CommandArgumentsException;
-import com.caplin.brjs.model.exception.command.CommandOperationException;
+import com.martiansoftware.jsap.JSAP;
+import com.martiansoftware.jsap.JSAPException;
+import com.martiansoftware.jsap.JSAPResult;
+import com.martiansoftware.jsap.UnflaggedOption;
 
-public class EchoCommandPlugin implements CommandPlugin {
+public class EchoCommandPlugin extends ArgsParsingCommandPlugin {
 
 	private BRJS brjs;
-
-	@Override
-	public void setBRJS(BRJS brjs) {
-		this.brjs = brjs;
-	}
-
-	@Override
-	public void doCommand(String[] args) throws CommandArgumentsException,
-			CommandOperationException {
-		String echo = Arrays.toString(args);
-		this.brjs.getConsoleWriter().println(echo);
-	}
 
 	@Override
 	public String getCommandDescription() {
@@ -34,8 +25,23 @@ public class EchoCommandPlugin implements CommandPlugin {
 	}
 
 	@Override
-	public String getCommandUsage() {
-		return "brjs echo <argument1> <argument2> <argumentx>";
+	public void setBRJS(BRJS brjs) {
+		this.brjs = brjs;
+	}
+
+	@Override
+	protected void configureArgsParser(JSAP argsParser) throws JSAPException {
+		UnflaggedOption messageOption = new UnflaggedOption("message")
+												.setGreedy(true);
+		argsParser.registerParameter(messageOption);
+	}
+
+	@Override
+	protected void doCommand(JSAPResult result) throws CommandArgumentsException,
+			CommandOperationException {
+		String[] messageArgs = result.getStringArray("message");
+		String echo = java.util.Arrays.toString(messageArgs);
+		this.brjs.getConsoleWriter().println(echo);
 	}
 
 }
