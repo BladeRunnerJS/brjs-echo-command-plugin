@@ -11,10 +11,17 @@ sourceSets {
     }
 }
 
-dependencies {
-	/* 
-	 * by default this build expects BladeRunner to be extracted into the directory above
-	 * change '../BladeRunner/' to the full path of BladeRunner if it is installed somewhere else
-	 */
-	compile fileTree(dir:"../BladeRunner/sdk/libs/java/system/", include:"brjs-*.jar")
+if (!file("BladeRunner").isDirectory())
+{
+    throw new GradleException("Please make sure that BladeRunner is extracted into the root of the project")
 }
+
+dependencies {
+	compile fileTree(dir:"BladeRunner/sdk/libs/java/system/", include:"brjs-*.jar")
+}
+
+jar.doLast {
+    println "${project.name} jar built in to ${archivePath.path}"
+}
+
+defaultTasks "build"

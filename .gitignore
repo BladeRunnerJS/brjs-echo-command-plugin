@@ -6,6 +6,7 @@ bin
 build
 
 .gradle
+BladeRunner
 
 # Package Files #
 *.jar
